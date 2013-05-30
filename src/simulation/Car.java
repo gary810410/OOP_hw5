@@ -15,7 +15,7 @@ public class Car extends JButton implements Runnable{
 	private TransparentIcon Ticon;
 	private ImageIcon icon;
 	private int PositionX;
-	private int Destination;
+	private int Destination = 1200;
 	private int curSpeed;
 	private int slow = 0;
 	private int speedup = 0;
@@ -26,16 +26,14 @@ public class Car extends JButton implements Runnable{
 	protected static int imgWidth = 50, imgHeight = 50;
 	protected static int CarWidth = 50;
 	protected static int MaxSpeed = 5;
-	protected static double slowdownTime = 4;	// unit: timeStamp
-	protected static double speedupTime = 4;
+	protected static double slowdownTime = 1;	// unit: timeStamp
+	protected static double speedupTime = 2;
 	
 	public static final int timeStamp = 50; 
 	private Highway highway;
 	
-	public Car(int Destination, Highway highway)
+	public Car()
 	{
-		this.Destination = Destination;
-		this.highway = highway;
 		try{
 			Ticon = new TransparentIcon(getImgURL());
 			icon = Ticon.getIcon();
@@ -49,6 +47,10 @@ public class Car extends JButton implements Runnable{
 		PositionX = 0;
 		State = 1;
 		this.setBounds(PositionX, 0, imgWidth, imgHeight);
+	}
+	public void setHighway(Highway highway)
+	{
+		this.highway = highway;
 	}
 	public void setPosition(int x)
 	{
@@ -84,15 +86,19 @@ public class Car extends JButton implements Runnable{
 	public void run() {
 		while(PositionX < Destination)
 		{
-			if(highway.frontCarDistance(PositionX, this) >= 0 && State == 1)
+			if(highway.getStop())
+				;
+			else if(highway.frontCarDistance(PositionX, this) >= 0 && State == 1)
 			{
+				this.setVisible(true);
 				if(highway.checkCrash(PositionX, this))
 				{
 					State = -1;
 					continue;
 				}
 				highway.CarRun(this, PositionX, curSpeed);
-				if(curSpeed < MaxSpeed)
+				int frontCarDistance = highway.frontCarDistance(PositionX, this);
+				if(frontCarDistance > curSpeed *2 && curSpeed < MaxSpeed)
 				{
 					speedup ++;
 					if(speedup == speedupTime)
@@ -102,8 +108,7 @@ public class Car extends JButton implements Runnable{
 					}
 					slow = 0;
 				}
-				int frontCarDistance = highway.frontCarDistance(PositionX, this);
-				if(frontCarDistance < curSpeed)
+				if(frontCarDistance < curSpeed*5)
 				{
 					slow ++;
 					if(slow == slowdownTime)
@@ -133,6 +138,7 @@ public class Car extends JButton implements Runnable{
 				}
 			}else if(State == 0)
 			{
+				this.setVisible(false);
 				highway.CarGoOnInterchange(this, PositionX);
 			}
 			try{

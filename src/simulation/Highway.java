@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
@@ -35,6 +34,9 @@ public class Highway extends JLayeredPane{
 	private boolean[] interchange;
 	private static int timeControl = 500;
 	
+	// Status control
+	private boolean stop;
+	
 	public Highway(int HighwayLength)
 	{
 		try{
@@ -51,12 +53,15 @@ public class Highway extends JLayeredPane{
 		interchange = new boolean[width];
 		this.HighwayLength = HighwayLength;
 		this.setLayout(null);
+		stop = true;
 	}
 	public void addCar(int x, Car newCar, Thread t, int state)
 	{
 		newCar.setPosition(x);
+		newCar.setVisible(false);
 		this.add(newCar, JLayeredPane.POPUP_LAYER);
 		newCar.setState(state);
+		newCar.setHighway(this);
 		
 		CrashFlag = false;
 		CrashFrom = HighwayLength;
@@ -178,6 +183,19 @@ public class Highway extends JLayeredPane{
 	{
 		return HighwayLength; 
 	}
+	public void changeStop(boolean b)
+	{
+		stop = b;
+	}
+	public boolean getStop()
+	{
+		return stop;
+	}
+	public void setHighwayLength(int Length)
+	{
+		HighwayLength = Length;
+		this.setBounds(0, 0, Length, 150);
+	}
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -192,23 +210,9 @@ public class Highway extends JLayeredPane{
 			if(HighwayState[i] == true)
 				System.out.println(i);
 		}
-	}/*
-	public class HighwayStatusControl extends JButton {
+	}
+	
 		
-		
-		private static final long serialVersionUID = 1111;
-		private boolean Stop;
-		
-		public HighwayStatusControl()
-		{
-			Stop = false;
-		}
-		public boolean IfStop()
-		{
-			return Stop;
-		}
-		
-	}*/
 	public class InterchangeControl implements Runnable{
 		
 		private int Position;
@@ -219,7 +223,6 @@ public class Highway extends JLayeredPane{
 		}
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			while(true)
 			{
 				try{
@@ -249,9 +252,18 @@ public class Highway extends JLayeredPane{
 		
 		public void run()
 		{
-			try{
-				Thread.sleep(5000);
-			}catch(Exception e){}
+			for(int i=0; i<20; i++)
+			{
+				while(getStop())
+				{
+					try{
+						Thread.sleep(400);
+					}catch(Exception e){}
+				}
+				try{
+					Thread.sleep(200);
+				}catch(Exception e){}
+			}
 			for(int i=from; i<=to; i++)
 			{
 				fixCrash(i);
@@ -277,14 +289,16 @@ public class Highway extends JLayeredPane{
 		Thread threadtmp;
 		for(int i=0; i<10; i++)
 		{
-			cartmp = new Car(1200, highway);
+			cartmp = new Car();
+			cartmp.setHighway(highway);
 			threadtmp = new Thread(cartmp);
 			highway.addCar(0, cartmp, threadtmp, 0);
 		}
 		highway.setInterchange(500);
 		for(int i=0; i<10; i++)
 		{
-			cartmp = new Car(1200, highway);
+			cartmp = new Car();
+			cartmp.setHighway(highway);
 			threadtmp = new Thread(cartmp);
 			highway.addCar(500, cartmp, threadtmp, 0);
 		}
