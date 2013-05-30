@@ -137,7 +137,6 @@ public class ControlPanel extends JPanel
 					CarTmp = (Car)(Class.forName("simulation."+CarType).newInstance());
 					ThreadTmp = new Thread(CarTmp);
 					highway.addCar(CarLocation, CarTmp, ThreadTmp, 0);
-					System.out.println("addcar");
 				}catch(Exception e){System.out.println("CarType Not Found");}
 			}
 		}

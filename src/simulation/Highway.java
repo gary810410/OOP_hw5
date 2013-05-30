@@ -18,7 +18,7 @@ public class Highway extends JLayeredPane{
 	private BufferedImage background;
 	private int width, height;
 	private int HighwayLength;
-	private static String imgURL = "http://w.csie.org/~b99902022/highway.jpg";
+	private static String imgURL = "http://w.csie.org/~b99902022/images/highway.jpg";
 	
 	// use boolean to record highway state
 	// true: has car,  false: no car
@@ -36,6 +36,7 @@ public class Highway extends JLayeredPane{
 	
 	// Status control
 	private boolean stop;
+	private boolean CarAlive;
 	
 	public Highway(int HighwayLength)
 	{
@@ -53,6 +54,7 @@ public class Highway extends JLayeredPane{
 		interchange = new boolean[width];
 		this.HighwayLength = HighwayLength;
 		this.setLayout(null);
+		CarAlive = true;
 		stop = true;
 	}
 	public void addCar(int x, Car newCar, Thread t, int state)
@@ -140,7 +142,7 @@ public class Highway extends JLayeredPane{
 	{
 		if(interchange[PositionX] == true)
 		{
-			if(frontCarDistance(PositionX, newCar) > 0)
+			if(frontCarDistance(PositionX, newCar) > 0 && backCarDistance(PositionX, newCar) > newCar.getWidth()/2)
 			{
 				newCar.setState(1);
 				interchange[PositionX] = false;
@@ -158,6 +160,18 @@ public class Highway extends JLayeredPane{
 			return width;
 		else
 			return Distance - newCar.getCarWidth();
+	}
+	public int backCarDistance(int x, Car newCar)
+	{
+		int i, Distance;
+		for(i=x; i>=0; i--)
+			if(HighwayState[i] == true)
+				break;
+		Distance = i;
+		if(i < 0)
+			return width;
+		else
+			return Distance;
 	}
 	public void clearState(int PositionX, Car newCar)
 	{
@@ -196,6 +210,22 @@ public class Highway extends JLayeredPane{
 		HighwayLength = Length;
 		this.setBounds(0, 0, Length, 150);
 	}
+	public void setAlive(boolean b)
+	{
+		CarAlive = b;
+		if(b)
+		{
+			for(int i=0; i<width; i++)
+			{
+				HighwayState[i] = false;
+				crashMark[i] = false;
+			}
+		}
+	}
+	public boolean getAlive()
+	{
+		return CarAlive;
+	}
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -203,15 +233,6 @@ public class Highway extends JLayeredPane{
 			g.drawImage(background, 0, 0, width, height, null);
 		}catch(Exception e){}
 	}
-	public void printHighwayState()
-	{
-		for(int i=0; i<width; i++)
-		{
-			if(HighwayState[i] == true)
-				System.out.println(i);
-		}
-	}
-	
 		
 	public class InterchangeControl implements Runnable{
 		
@@ -247,7 +268,6 @@ public class Highway extends JLayeredPane{
 		{
 			this.from = from;
 			this.to = to;
-			System.out.println(from +" "+to);
 		}
 		
 		public void run()
@@ -257,19 +277,25 @@ public class Highway extends JLayeredPane{
 				while(getStop())
 				{
 					try{
-						Thread.sleep(400);
+						Thread.sleep(200);
 					}catch(Exception e){}
+					if(!CarAlive)
+						break;
 				}
 				try{
 					Thread.sleep(200);
 				}catch(Exception e){}
+				
+				if(!CarAlive)
+				{
+					break;
+				}
 			}
 			for(int i=from; i<=to; i++)
 			{
 				fixCrash(i);
 				HighwayState[i] = false;
 			}
-			System.out.println("Crash fixed");
 		}
 	}
 	public static void main(String[] args)

@@ -69,7 +69,7 @@ public class Car extends JButton implements Runnable{
 	protected URL getImgURL()
 	{
 		try{
-			return new URL("http://w.csie.org/~b99902022/car.png");
+			return new URL("http://w.csie.org/~b99902022/images/car.png");
 		}catch(Exception e){
 			return null;
 		}
@@ -77,14 +77,14 @@ public class Car extends JButton implements Runnable{
 	protected URL getCrashImgURL()
 	{
 		try{
-			return new URL("http://w.csie.org/~b99902022/crashcar.png");
+			return new URL("http://w.csie.org/~b99902022/images/crashcar.png");
 		}catch(Exception e){
 			return null;
 		}
 	}
 	@Override
 	public void run() {
-		while(PositionX < Destination)
+		while(PositionX < Destination && highway.getAlive())
 		{
 			if(highway.getStop())
 				;
@@ -146,7 +146,6 @@ public class Car extends JButton implements Runnable{
 			}catch(Exception e){}
 		}
 		this.setVisible(false);
-		System.out.println("finish");
 	}
 
 }
