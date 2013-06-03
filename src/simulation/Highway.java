@@ -310,7 +310,7 @@ public class Highway extends JLayeredPane{
 		main.setVisible(true);
 		
 		highway.setInterchange(0);
-		
+		/*
 		Car cartmp;
 		Thread threadtmp;
 		for(int i=0; i<10; i++)
@@ -327,7 +327,7 @@ public class Highway extends JLayeredPane{
 			cartmp.setHighway(highway);
 			threadtmp = new Thread(cartmp);
 			highway.addCar(500, cartmp, threadtmp, 0);
-		}
+		}*/
 	}
 }
 

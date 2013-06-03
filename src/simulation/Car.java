@@ -23,8 +23,6 @@ public class Car extends JButton implements Runnable{
 	// state 0: stop, 1: run, -1: crash
 	private int State;
 	
-	protected static int imgWidth = 50, imgHeight = 50;
-	protected static int CarWidth = 50;
 	protected static int MaxSpeed = 5;
 	protected static double slowdownTime = 1;	// unit: timeStamp
 	protected static double speedupTime = 2;
@@ -46,7 +44,7 @@ public class Car extends JButton implements Runnable{
 		curSpeed = 0;
 		PositionX = 0;
 		State = 1;
-		this.setBounds(PositionX, 0, imgWidth, imgHeight);
+		this.setBounds(PositionX, 0, getCarImageWidth(), getCarImageHeight());
 	}
 	public void setHighway(Highway highway)
 	{
@@ -55,17 +53,25 @@ public class Car extends JButton implements Runnable{
 	public void setPosition(int x)
 	{
 		PositionX = x;
-		this.setBounds(PositionX, 0, imgWidth, imgHeight);
-	}
-	public int getCarWidth()
-	{
-		return CarWidth; 
+		this.setBounds(PositionX, 0, getCarImageWidth(), getCarImageHeight());
 	}
 	public void setState(int state)
 	{
 		this.State = state;
 	}
 	// need be override
+	protected int getCarImageWidth()
+	{
+		return 50;
+	}
+	protected int getCarImageHeight()
+	{
+		return 50;
+	}
+	protected int getCarWidth()
+	{
+		return 50; 
+	}
 	protected URL getImgURL()
 	{
 		try{
@@ -118,7 +124,7 @@ public class Car extends JButton implements Runnable{
 					}
 					speedup = 0;
 				}
-				this.setBounds(PositionX, 0, imgWidth, imgHeight);
+				this.setBounds(PositionX, 0, getCarImageWidth(), getCarImageHeight());
 				repaint();
 			}else if(State == -1)
 			{

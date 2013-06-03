@@ -27,7 +27,7 @@ public class ControlPanel extends JPanel
 	private boolean Stop;
 	
 	// highway place car
-	private String[] CarType = {"Car"};
+	private String[] CarType = {"Car", "Bus"};
 	private JComboBox<String> CarTypeList;
 	private JLabel CarNumberLabel;
 	private TextArea CarNumber;
