@@ -142,7 +142,10 @@ public class Highway extends JLayeredPane{
 	{
 		if(interchange[PositionX] == true)
 		{
-			if(frontCarDistance(PositionX, newCar) > 0 && backCarDistance(PositionX, newCar) > newCar.getWidth()/2)
+			for(int i=0; i<newCar.getWidth(); i++)
+				if(HighwayState[i+PositionX] == true)
+					return;
+			if(backCarDistance(PositionX, newCar) > newCar.getWidth()/2)
 			{
 				newCar.setState(1);
 				interchange[PositionX] = false;
