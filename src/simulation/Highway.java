@@ -57,7 +57,7 @@ public class Highway extends JLayeredPane{
 		CarAlive = true;
 		stop = true;
 	}
-	public void addCar(int x, Car newCar, Thread t, int state)
+	public void addCar(int x, CarType newCar, Thread t, int state)
 	{
 		newCar.setPosition(x);
 		newCar.setVisible(false);
@@ -95,7 +95,7 @@ public class Highway extends JLayeredPane{
 			CrashThread.start();
 		}
 	}
-	public synchronized void CarRun(Car newCar, int PositionX, int curSpeed)
+	public synchronized void CarRun(CarType newCar, int PositionX, int curSpeed)
 	{
 		int newPosition = PositionX + curSpeed;
 		for(int i=0; i<newCar.getCarWidth(); i++)
@@ -138,7 +138,7 @@ public class Highway extends JLayeredPane{
 		Thread control = new Thread(Interchange);
 		control.start();
 	}
-	public synchronized void CarGoOnInterchange(Car newCar, int PositionX)
+	public synchronized void CarGoOnInterchange(CarType newCar, int PositionX)
 	{
 		if(interchange[PositionX] == true)
 		{
@@ -152,7 +152,7 @@ public class Highway extends JLayeredPane{
 			}
 		}
 	}
-	public int frontCarDistance(int x, Car newCar)
+	public int frontCarDistance(int x, CarType newCar)
 	{
 		int i, Distance;
 		for(i=x+newCar.getCarWidth(); i<width; i++)
@@ -164,7 +164,7 @@ public class Highway extends JLayeredPane{
 		else
 			return Distance - newCar.getCarWidth();
 	}
-	public int backCarDistance(int x, Car newCar)
+	public int backCarDistance(int x, CarType newCar)
 	{
 		int i, Distance;
 		for(i=x; i>=0; i--)
@@ -176,7 +176,7 @@ public class Highway extends JLayeredPane{
 		else
 			return Distance;
 	}
-	public void clearState(int PositionX, Car newCar)
+	public void clearState(int PositionX, CarType newCar)
 	{
 		for(int i=0; i<newCar.getCarWidth(); i++)
 			HighwayState[i+PositionX] = false;
@@ -189,7 +189,7 @@ public class Highway extends JLayeredPane{
 	{
 		crashMark[x] = false;
 	}
-	public boolean checkCrash(int x, Car newCar)
+	public boolean checkCrash(int x, CarType newCar)
 	{
 		for(int i=0; i<HighwayLength; i++)
 			if(crashMark[i] && i>=x && i<= x+newCar.getCarWidth())

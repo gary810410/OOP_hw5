@@ -2,27 +2,21 @@ package simulation;
 
 import java.net.URL;
 
-public class Bus extends Car{
+public class Bus extends CarType{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1111;
 	
-	protected static int MaxSpeed = 4;
-	protected static double slowdownTime = 2;	// unit: timeStamp
-	protected static double speedupTime = 2;
-	
-	protected int getCarImageWidth()
+	public Bus()
 	{
-		return 100;
-	}
-	protected int getCarImageHeight()
-	{
-		return 50;
-	}
-	protected int getCarWidth()
-	{
-		return 100; 
+		MaxSpeed = 4;
+		slowdownTime = 2;
+		speedupTime = 2;
+		imgWidth = 80;
+		imgHeight = 50;
+		carWidth = 80;
+		
 	}
 	protected URL getImgURL()
 	{

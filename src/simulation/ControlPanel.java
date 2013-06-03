@@ -115,7 +115,7 @@ public class ControlPanel extends JPanel
 		public int CarNumber;
 		public int CarLocation;
 		public String CarType;
-		private Car CarTmp;
+		private CarType CarTmp;
 		private Thread ThreadTmp;
 		
 		public PlaceCar(int number, int location, String type)
@@ -134,7 +134,7 @@ public class ControlPanel extends JPanel
 						highway.setInterchange(CarLocation);
 						interchange[CarLocation] = true;
 					}
-					CarTmp = (Car)(Class.forName("simulation."+CarType).newInstance());
+					CarTmp = (CarType)(Class.forName("simulation."+CarType).newInstance());
 					ThreadTmp = new Thread(CarTmp);
 					highway.addCar(CarLocation, CarTmp, ThreadTmp, 0);
 				}catch(Exception e){System.out.println("CarType Not Found");}
